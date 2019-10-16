@@ -9,7 +9,8 @@ import javafx.scene.paint.Color;
 
 public class Controller {
 
-    private Game game = new Game();
+    private Game             game;
+    private CanvasRedrawTask animationTimer;
 
     @FXML
     Button startButton;
@@ -20,17 +21,21 @@ public class Controller {
     @FXML
     Canvas canvas;
 
+    @FXML
     public void initialize() {
-        startButton.setOnAction(game::start);
-        pauseButton.setOnAction(game::pause);
-        canvas.setWidth(game.getWidth());
-        canvas.setHeight(game.getHeight());
-        canvas.setOnMousePressed(game::mousePressed);
-        canvas.setOnMouseReleased(game::mouseReleased);
-
+        canvas.setWidth(Game.getWidth());
+        canvas.setHeight(Game.getHeight());
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+        game = new Game();
+        animationTimer = new CanvasRedrawTask(graphicsContext2D, game::onRedraw);
+        game.setAnimationTimer(animationTimer);
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.setStroke(Color.GREEN);
-        graphicsContext2D.fillRect(0, 0, game.getWidth(), game.getHeight());
+        graphicsContext2D.fillRect(0, 0, Game.getWidth(), Game.getHeight());
+
+        startButton.setOnAction(game::start);
+        pauseButton.setOnAction(game::pause);
+        canvas.setOnMousePressed(game::mousePressed);
+        canvas.setOnMouseReleased(game::mouseReleased);
     }
 }
