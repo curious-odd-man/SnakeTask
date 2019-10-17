@@ -19,14 +19,15 @@ public final class Log {
     }
 
     private static String printLineInfo() {
-        StackTraceElement[] stackTrace = Thread.currentThread()
-                                               .getStackTrace();
-        if (stackTrace.length <= 3) {
+        final int STACK_ELEMENT_INDEX = 4;
+        Thread currentThread = Thread.currentThread();
+        StackTraceElement[] stackTrace = currentThread.getStackTrace();
+        if (stackTrace.length < STACK_ELEMENT_INDEX) {
             return "Stack Trace Error";
         }
 
-        StackTraceElement stackTraceElement = stackTrace[4];
-        return stackTraceElement.getMethodName() + "@ .(" + stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber() + ')';
+        StackTraceElement element = stackTrace[STACK_ELEMENT_INDEX];
+        return '[' + currentThread.getName() + ':' + currentThread.getId() + "] " + element.getMethodName() + " in .(" + element.getFileName() + ':' + element.getLineNumber() + ')';
     }
 
     private static String format(Object o) {

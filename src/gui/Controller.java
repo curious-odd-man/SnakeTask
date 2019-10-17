@@ -28,13 +28,18 @@ public class Controller {
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         game = new Game();
         animationTimer = new CanvasRedrawTask(graphicsContext2D, game::onRedraw);
-        game.setAnimationTimer(animationTimer);
         graphicsContext2D.setFill(Color.WHITE);
         graphicsContext2D.setStroke(Color.GREEN);
         graphicsContext2D.fillRect(0, 0, Game.getWidth(), Game.getHeight());
 
-        startButton.setOnAction(game::start);
-        pauseButton.setOnAction(game::pause);
+        startButton.setOnAction(v -> {
+            game.start(v);
+            animationTimer.start();
+        });
+        pauseButton.setOnAction(v -> {
+            animationTimer.stop();
+            game.pause(v);
+        });
         canvas.setOnMousePressed(game::mousePressed);
         canvas.setOnMouseReleased(game::mouseReleased);
     }

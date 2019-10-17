@@ -1,22 +1,29 @@
 package game;
 
-import gui.CanvasRedrawTask;
 import javafx.event.ActionEvent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class Game {
-    private CanvasRedrawTask animationTimer;
-
     public Game() {
         Log.On();
     }
 
+    /**
+     * Width of the field
+     *
+     * @return width in pixels
+     */
     public static long getWidth() {
         return 500;
     }
 
+    /**
+     * Height of the field
+     *
+     * @return height in pixels
+     */
     public static long getHeight() {
         return 300;
     }
@@ -27,17 +34,15 @@ public class Game {
      * @param event
      */
     public void start(ActionEvent event) {
-        animationTimer.start();
         Log.debug();
     }
 
     /**
-     * This is called when pause buttons is called
+     * This is called when pause buttons is pressed
      *
      * @param event
      */
     public void pause(ActionEvent event) {
-        animationTimer.stop();
         Log.debug();
     }
 
@@ -68,14 +73,5 @@ public class Game {
     public void onRedraw(GraphicsContext graphicsContext, Long now) {
         graphicsContext.setFill(Color.WHITE);
         graphicsContext.fillRect(0, 0, getWidth(), getHeight());
-    }
-
-    /**
-     * Setter for animation timer
-     *
-     * @param animationTimer
-     */
-    public void setAnimationTimer(CanvasRedrawTask animationTimer) {
-        this.animationTimer = animationTimer;
     }
 }
