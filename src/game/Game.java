@@ -5,9 +5,22 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
+import java.util.function.Consumer;
+
 public class Game {
-    public Game() {
+    private final Consumer<Long> aSetScore;
+
+    public Game(Consumer<Long> setScore) {
         Log.On();
+        aSetScore = setScore;
+    }
+
+    /**
+     * Update score on the screen
+     * @param score new score
+     */
+    public void setScore(long score) {
+        aSetScore.accept(score);
     }
 
     /**
