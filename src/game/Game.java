@@ -10,6 +10,8 @@ import java.util.function.Consumer;
 public class Game {
     private final Consumer<Long> aSetScore;
 
+    private Food apple;
+
     public Game(Consumer<Long> setScore) {
         Log.On();
         aSetScore = setScore;
@@ -17,6 +19,7 @@ public class Game {
 
     /**
      * Update score on the screen
+     *
      * @param score new score
      */
     public void setScore(long score) {
@@ -28,8 +31,8 @@ public class Game {
      *
      * @return width in pixels
      */
-    public static long getWidth() {
-        return 500;
+    public static int getWidth() {
+        return 1000;
     }
 
     /**
@@ -37,8 +40,8 @@ public class Game {
      *
      * @return height in pixels
      */
-    public static long getHeight() {
-        return 300;
+    public static int getHeight() {
+        return 500;
     }
 
     /**
@@ -48,6 +51,8 @@ public class Game {
      */
     public void start(ActionEvent event) {
         Log.debug();
+        Point p = Point.random(getWidth(), getHeight());
+        apple = new Apple(p);
     }
 
     /**
@@ -86,5 +91,9 @@ public class Game {
     public void onRedraw(GraphicsContext graphicsContext, Long now) {
         graphicsContext.setFill(Color.WHITE);
         graphicsContext.fillRect(0, 0, getWidth(), getHeight());
+
+        if (apple != null) {
+            apple.draw(graphicsContext);
+        }
     }
 }
