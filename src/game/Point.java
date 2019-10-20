@@ -1,5 +1,6 @@
 package game;
 
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Point {
@@ -21,6 +22,11 @@ public class Point {
         int y = ThreadLocalRandom.current()
                                  .nextInt(maxY);
         return new Point(x, y);
+    }
+
+    public static Point middle() {
+        return new Point(Game.getWidth() / SIZE / 2,
+                         Game.getHeight() / SIZE / 2);
     }
 
     public int getPixelX() {
@@ -45,5 +51,23 @@ public class Point {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Point point = (Point) o;
+        return x == point.x &&
+                y == point.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }

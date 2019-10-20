@@ -56,4 +56,8 @@ public class Mouse extends Food implements Runnable {
             getPoint().setY(getPoint().getY() + direction.getY());
         }
     }
+
+    public void kill() {
+        getPoint().setX(-1000);
+    }
 }

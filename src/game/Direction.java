@@ -3,10 +3,11 @@ package game;
 import java.util.concurrent.ThreadLocalRandom;
 
 public enum Direction {
-    UP(0, -1),
-    DOWN(0, 1),
-    LEFT(-1, 0),
-    RIGHT(1, 0),
+    UP(0, -1),          // 0
+    RIGHT(1, 0),        // 1
+    DOWN(0, 1),         // 2
+    LEFT(-1, 0),        // 3
+
     UP_LEFT(-1, -1),
     UP_RIGHT(1, -1),
     DOWN_LEFT(-1, 1),
@@ -16,6 +17,17 @@ public enum Direction {
         int directionIndex = ThreadLocalRandom.current()
                                               .nextInt(values().length);
         return values()[directionIndex];
+    }
+
+    public Direction left() {
+        int idx = ordinal();
+        int takeIndex = (4 + idx - 1) % 4;
+        return values()[takeIndex];
+    }
+
+    public Direction right() {
+        int idx = ordinal();
+        return values()[(idx + 1) % 4];
     }
 
     private final int aX;

@@ -10,11 +10,14 @@ import java.util.function.Consumer;
 public class Game {
     private final Consumer<Long> aSetScore;
 
-    private Food apple;
-    private Mouse mouse;
+    private Food   apple;
+    private Mouse  mouse;
     private Thread mouseThread;
-    private Mouse crazyMouse;
+    private Mouse  crazyMouse;
     private Thread crazyMouseThread;
+    private Snake  snake;
+    private Thread snakeThread;
+    private long   score = 0;
 
     public Game(Consumer<Long> setScore) {
         Log.On();
@@ -65,6 +68,41 @@ public class Game {
         crazyMouse = new Mouse(p3, 5);
         crazyMouseThread = new Thread(crazyMouse);
         crazyMouseThread.start();
+        snake = new Snake(this::onSnakeMove);
+        snakeThread = new Thread(snake);
+        snakeThread.start();
+    }
+
+    public void eatFood(Food food) {
+        snake.grow(food.getSnakeIncrement());
+        score += food.getScore();
+        setScore(score);
+    }
+
+    public void onSnakeMove(Point p) {
+        if (apple.getPoint()
+                 .equals(p)) {
+            eatFood(apple);
+            apple = new Apple(Point.random(getWidth(), getHeight()));
+        }
+
+        if (mouse.getPoint()
+                 .equals(p)) {
+            eatFood(mouse);
+            mouse.kill();
+            mouse = new Mouse(Point.random(getWidth(), getHeight()));
+            mouseThread = new Thread(mouse);
+            mouseThread.start();
+        }
+
+        if (crazyMouse.getPoint()
+                      .equals(p)) {
+            eatFood(crazyMouse);
+            crazyMouse.kill();
+            crazyMouse = new Mouse(Point.random(getWidth(), getHeight()), 5);
+            crazyMouseThread = new Thread(crazyMouse);
+            crazyMouseThread.start();
+        }
     }
 
     /**
@@ -82,7 +120,18 @@ public class Game {
      * @param mouseEvent
      */
     public void mousePressed(MouseEvent mouseEvent) {
-        Log.debug("Pressed at " + mouseEvent.getX() + ':' + mouseEvent.getY());
+        switch (mouseEvent.getButton()) {
+            case PRIMARY:
+                snake.turnLeft();
+                break;
+
+            case SECONDARY:
+                snake.turnRight();
+                break;
+
+            default:
+                break;
+        }
     }
 
     /**
@@ -114,6 +163,10 @@ public class Game {
 
         if (crazyMouse != null) {
             crazyMouse.draw(graphicsContext);
+        }
+
+        if (snake != null) {
+            snake.draw(graphicsContext);
         }
     }
 }
