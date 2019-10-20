@@ -11,6 +11,10 @@ public class Game {
     private final Consumer<Long> aSetScore;
 
     private Food apple;
+    private Mouse mouse;
+    private Thread mouseThread;
+    private Mouse crazyMouse;
+    private Thread crazyMouseThread;
 
     public Game(Consumer<Long> setScore) {
         Log.On();
@@ -53,6 +57,14 @@ public class Game {
         Log.debug();
         Point p = Point.random(getWidth(), getHeight());
         apple = new Apple(p);
+        Point p1 = Point.random(getWidth(), getHeight());
+        mouse = new Mouse(p1);
+        mouseThread = new Thread(mouse);
+        mouseThread.start();
+        Point p3 = Point.random(getWidth(), getHeight());
+        crazyMouse = new Mouse(p3, 5);
+        crazyMouseThread = new Thread(crazyMouse);
+        crazyMouseThread.start();
     }
 
     /**
@@ -94,6 +106,14 @@ public class Game {
 
         if (apple != null) {
             apple.draw(graphicsContext);
+        }
+
+        if (mouse != null) {
+            mouse.draw(graphicsContext);
+        }
+
+        if (crazyMouse != null) {
+            crazyMouse.draw(graphicsContext);
         }
     }
 }
